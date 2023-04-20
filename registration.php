@@ -1,5 +1,21 @@
 <?php
+echo '<pre>';print_r($_GET);
 
+function getHobbies(){
+  $hobbies = '';
+  foreach($_GET['hobby'] as $hobby){
+    $hobbies = $hobbies.$hobby.', ';
+  }
+
+  return $hobbies;
+}
+if(isset($_GET) && !empty($_GET)){
+  echo 'Name :'.$_GET['firstname']. ' '.$_GET['lastname'].'<br/>';
+  echo 'Course :'.$_GET['course'].'<br/>';
+  echo 'Gender :'.$_GET['gender'].'<br/>';
+  echo 'Hobby :'.getHobbies(). '<br/>';
+  echo 'Phone & Email :'.$_GET['phone']. ' '.$_GET['email'].'<br/>';
+}
 ?>
 <!Doctype Html>  
 <Html>     
@@ -87,7 +103,7 @@ Create a Registration form
 <label>     
 Course :    
 </label>     
-<select>    
+<select name="course">    
 <option value="Course">Course</option>    
 <option value="BCA">BCA</option>    
 <option value="BBA">BBA</option>    
@@ -101,19 +117,19 @@ Course :
 <label>     
 Gender :    
 </label><br>    
-<input type="radio" name="gender"/> Male <br>    
-<input type="radio" name="gender"/> Female <br>    
-<input type="radio" name="gender"/> Other    
+<input type="radio" name="gender" value="male"/> Male <br>    
+<input type="radio" name="gender" value="Female"/> Female <br>    
+<input type="radio" name="gender" value="Other"/> Other    
 <br>    
 <br>    
 <label>  
 Hobbies:  
 </label>    
 <br>    
-<input type="checkbox" name="Programming"> Programming <br>    
-<input type="checkbox" name="Cricket"> Cricket <br>    
-<input type="checkbox" name="Football"> Football  <br>   
-<input type="checkbox" name="reading Novel"> Reading Novel  <br>   
+<input type="checkbox" name="hobby[]" value="Programming"> Programming <br>    
+<input type="checkbox" name="hobby[]" value="Cricket"> Cricket <br>    
+<input type="checkbox" name="hobby[]" value="Football"> Football  <br>   
+<input type="checkbox" name="hobby[]" value="Reading Novel"> Reading Novel  <br>   
 <br>    
 <br>   
 <label>     
