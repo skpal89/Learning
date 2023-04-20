@@ -1,3 +1,6 @@
 Git commands:
 
 git status
+git add <filename> or git add .
+git commit -m "post form data using post method"
+git push
