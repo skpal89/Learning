@@ -1,21 +1,21 @@
 <?php
-echo '<pre>';print_r($_GET);
+echo '<pre>';print_r($_POST);
 
 function getHobbies(){
   $hobbies = '';
-  foreach($_GET['hobby'] as $hobby){
+  foreach($_POST['hobby'] as $hobby){
     $hobbies = $hobbies.$hobby.', ';
   }
 
   return $hobbies;
 }
 
-if(isset($_GET) && !empty($_GET)){
-  echo 'Name :'.$_GET['firstname']. ' '.$_GET['lastname'].'<br/>';
-  echo 'Course :'.$_GET['course'].'<br/>';
-  echo 'Gender :'.$_GET['gender'].'<br/>';
-  echo 'Hobby :'.implode('|', $_GET['hobby']). '<br/>';
-  echo 'Phone & Email :'.$_GET['phone']. ' '.$_GET['email'].'<br/>';
+if(isset($_POST) && !empty($_POST)){
+  echo 'Name :'.$_POST['firstname']. ' '.$_POST['lastname'].'<br/>';
+  echo 'Course :'.$_POST['course'].'<br/>';
+  echo 'Gender :'.$_POST['gender'].'<br/>';
+  echo 'Hobby :'.implode('|', $_POST['hobby']). '<br/>';
+  echo 'Phone & Email :'.$_POST['phone']. ' '.$_POST['email'].'<br/>';
 }
 ?>
 <!Doctype Html>  
@@ -95,7 +95,7 @@ Create a Registration form
     <p>Please fill in this form to create an account.</p>
     <hr> 
 <br>    
-<form action="" name="registration-page"> 
+<form action="" name="registration-page" method="post"> 
 <div class="container">   
 <label> Firstname </label>           
 <input type="text" placeholder="Enter First name" name="firstname" size="15"/> <br> <br>   
