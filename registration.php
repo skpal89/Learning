@@ -1,4 +1,6 @@
 <?php
+
+?>
 <!Doctype Html>  
 <Html>     
 <Head>  
@@ -76,7 +78,7 @@ Create a Registration form
     <p>Please fill in this form to create an account.</p>
     <hr> 
 <br>    
-<form> 
+<form action="" name="registration-page"> 
 <div class="container">   
 <label> Firstname </label>           
 <input type="text" placeholder="Enter First name" name="firstname" size="15"/> <br> <br>   
