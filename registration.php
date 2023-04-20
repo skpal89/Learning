@@ -9,11 +9,12 @@ function getHobbies(){
 
   return $hobbies;
 }
+
 if(isset($_GET) && !empty($_GET)){
   echo 'Name :'.$_GET['firstname']. ' '.$_GET['lastname'].'<br/>';
   echo 'Course :'.$_GET['course'].'<br/>';
   echo 'Gender :'.$_GET['gender'].'<br/>';
-  echo 'Hobby :'.getHobbies(). '<br/>';
+  echo 'Hobby :'.implode('|', $_GET['hobby']). '<br/>';
   echo 'Phone & Email :'.$_GET['phone']. ' '.$_GET['email'].'<br/>';
 }
 ?>
