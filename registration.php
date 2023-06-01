@@ -1,12 +1,5 @@
 <?php
 
-if(isset($_GET['id']))
-{
-  $data = getData($_GET['id']);
-
-  //echo '<pre>';print_r($data);
-}
-
 function getHobbies(){
   $hobbies = '';
   foreach($_POST['hobby'] as $hobby){
@@ -16,19 +9,25 @@ function getHobbies(){
   return $hobbies;
 }
 
-function getData($id)
+function dbConnection()
 {
   $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "student";
+  $username = "root";
+  $password = "";
+  $dbname = "student";
 
-    // Create connection
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    // Check connection
-    if (!$conn) {
-      die("Connection failed: " . mysqli_connect_error());
-    }
+  // Create connection
+  $conn = mysqli_connect($servername, $username, $password, $dbname);
+  // Check connection
+  if (!$conn) {
+    die("Connection failed: " . mysqli_connect_error());
+  }
+  return $conn;
+}
+
+function getData($id)
+{
+    $conn = dbConnection();
     $sql="SELECT * FROM student_info where student_id=".$id;
     if ($result = mysqli_query($conn, $sql)) {
       $row = $result->fetch_assoc();
@@ -40,48 +39,68 @@ function getData($id)
     mysqli_close($conn);
 
 }
-/**
- *  save data
- * 
+/*
+update
  */
+function update($id, $post)
+{
+  $conn = dbConnection();
+
+  $sql = "UPDATE student_info SET first_name='".$post['firstname']."', last_name='". $post['lastname']."', course='". $post['course']."', gender='". ($post['gender'] ?? '')."', hobbies='".implode("|",$post['hobby'])."', phone='" .$post['phone'] ."', address='". $post['address']. "', e_mail='". $post['email']. "', password='". $post['pass']."' WHERE student_id=$id";
+
+//echo $sql; die;
+
+  if (mysqli_query($conn, $sql)) {
+    echo "Record updated successfully";
+  } else {
+    echo "Error updating record: " . mysqli_error($conn);
+  }
+
+  mysqli_close($conn);
+
+}
+
+function insert($post)
+{
+  //print_r($post); die;
+  $conn = dbConnection();
+  $sql = "INSERT INTO student_info (first_name, last_name, course, gender, hobbies, phone, address, e_mail, password) VALUES ('".$post['firstname']."','". $post['lastname']."','". $post['course']."','". $post['gender']."','". implode("|",$post['hobby'])."','" .$post['phone'] ."','". $post['address']. "','". $post['email']. "','". $post['pass']."')";
+
+  //echo $sql; die;
+  if (mysqli_query($conn, $sql)) {
+    echo "data saved successfully";
+  } else {
+    echo "Error: " . $sql . "<br>" . mysqli_error($conn);
+  }
+
+  mysqli_close($conn);
+
+}
+
 function saveData($post)
 {
-    $servername = "localhost";
-    $username = "root";
-    $password = "";
-    $dbname = "student";
-
-    // Create connection
-    $conn = mysqli_connect($servername, $username, $password, $dbname);
-    // Check connection
-    if (!$conn) {
-      die("Connection failed: " . mysqli_connect_error());
+  $conn = dbConnection();
+    
+    if(isset($_GET['id']))
+    {
+      update($_GET['id'], $post); 
+    }else{
+      insert($post);
     }
 
-    $hobby = implode('|', $post['hobby']); 
-
-    $sql = "INSERT INTO student_info (first_name, last_name, course, gender, hobbies, phone, address, e_mail, password) VALUES ('".$post['firstname']."','". $post['lastname']."','". $post['course']."','". $post['gender']."','".$hobby ."','" .$post['phone'] ."','". $post['address']. "','". $post['email']. "','". $post['pass']."')";
-
-    //echo $sql; die;
-    if (mysqli_query($conn, $sql)) {
-      echo "data saved successfully";
-    } else {
-      echo "Error: " . $sql . "<br>" . mysqli_error($conn);
-    }
-
-    mysqli_close($conn);
+   
   }
 
 if(isset($_POST) && !empty($_POST)){
-
-  echo 'Name :'.$_POST['firstname']. ' '.$_POST['lastname'].'<br/>';
-  echo 'Course :'.$_POST['course'].'<br/>';
-  echo 'Gender :'.$_POST['gender'].'<br/>';
-  echo 'Hobby :'.implode('|', $_POST['hobby']). '<br/>';
-  echo 'Phone & Email :'.$_POST['phone']. ' '.$_POST['email'].'<br/>';
-  echo 'Addresss :'.$_POST['address'];
-
+    //echo '<pre>';print_r($_POST);
   saveData($_POST);
+}
+
+if(isset($_GET['id']))
+{
+  $data = getData($_GET['id']);
+
+  //echo '<pre>';print_r($data);
 }
 
 
@@ -92,7 +111,7 @@ if(isset($_POST) && !empty($_POST)){
 <style>
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color: green;
+  background-color:SlateBlue;
 }
 
 * {
@@ -102,7 +121,7 @@ body {
 /* Add padding to containers */
 .container {
   padding: 16px;
-  background-color: white;
+  background-color: Violet;
 }
 
 /* Full-width input fields */
@@ -166,9 +185,9 @@ Create a Registration form
 <form action="" name="registration-page" method="post"> 
 <div class="container">   
 <label> Firstname </label>           
-<input type="text" placeholder="Enter First name" name="firstname" size="15" value="<?php echo $data['first_name'] ?>"/> <br> <br>   
+<input type="text" placeholder="Enter First name" name="firstname" size="15" value="<?php echo $data['first_name'] ?? '' ?>"/> <br> <br>   
 <label> Lastname: </label>           
-<input type="text" placeholder="Enter Last name"name="lastname" size="15" value="<?php echo $data['last_name'] ?>"/> <br> <br>    
+<input type="text" placeholder="Enter Last name"name="lastname" size="15" value="<?php echo $data['last_name'] ?? '' ?>"/> <br> <br>    
 <label>     
 Course :    
 </label> 
@@ -180,44 +199,60 @@ Course :
   <?php 
     foreach($courses as $course){
   ?>
-  <option value="<?php echo $course?>" <?php if($data['course'] == $course){echo 'selected';}?>><?php echo $course?></option>
+  <option value="<?php echo $course?>" <?php if(($data['course'] ?? '') == $course){echo 'selected';}?>><?php echo $course?></option>
   <?php
     }
   ?>
 </select>    
 <br>    
 <br>    
-<label>     
+<label> 
+<?php
+  $gender = $data['gender'] ?? ''; // null coelacing operator
+  $hobbies = $data['hobbies'] ?? ''; 
+  $hobbiesArray = explode("|",$hobbies);
+  //print_r($hobbiesArray) ;
+
+  /*$gender = $data['gender'] ? $data['gender'] : ''; // ternary operator
+
+  if(isset($data['gender'])){      // normal way of doing
+    $gender = $data['gender'];
+  }else{
+    $gender = '';
+  }*/
+
+
+?>
 Gender :    
 </label><br>    
-<input type="radio" name="gender" <?php if(strtolower($data['gender']) == 'male'){echo 'checked';}?>/> Male <br>    
-<input type="radio" name="gender" <?php if(strtolower($data['gender']) == 'female'){echo 'checked';}?>/> Female <br>    
-<input type="radio" name="gender" <?php if(strtolower($data['gender']) == 'other'){echo 'checked';}?>/> Other    
+<input type="radio" name="gender" <?php if(strtolower($gender) == 'male'){echo 'checked';}?> value="male"/> Male <br>    
+<input type="radio" name="gender" <?php if(strtolower($gender) == 'female'){echo 'checked';}?> value="female"/> Female <br>    
+<input type="radio" name="gender" <?php if(strtolower($gender) == 'other'){echo 'checked';}?> value="other"/> Other    
 <br>    
 <br>    
 <label>  
 Hobbies:  
 </label>    
 <br>    
-<input type="checkbox" name="hobby[]" <?php if(strtolower($data['hobbies']) == 'programming'){echo 'checked';}?>> Programming <br>    
-<input type="checkbox" name="hobby[]" <?php if(strtolower($data['hobbies']) == 'cricket'){echo 'checked';}?>> Cricket <br>    
-<input type="checkbox" name="hobby[]" <?php if(strtolower($data['hobbies']) == 'football'){echo 'checked';}?>> Football  <br>   
-<input type="checkbox" name="hobby[]" <?php if(strtolower($data['hobbies']) == 'reading novel'){echo 'checked';}?>> Reading Novel  <br>   
+<input type="checkbox" name="hobby[]" <?php if(in_array('Programming',$hobbiesArray)){echo 'checked';}?> value="Programming"> Programming <br>    
+<input type="checkbox" name="hobby[]" <?php if(in_array('Cricket',$hobbiesArray)){echo 'checked';}?> value="Cricket"> Cricket <br>    
+<input type="checkbox" name="hobby[]" <?php if(in_array('Football',$hobbiesArray)){echo 'checked';}?> value="Football"> Football  <br>   
+<input type="checkbox" name="hobby[]" <?php if(in_array('Reading Novel',$hobbiesArray)){echo 'checked';}?> value="Reading Novel"> Reading Novel  <br>   
 <br>    
 <br>   
 <label>     
 Phone :    
 </label>      
-<input type="text" placeholder="Enter phone no."name="phone" size="10" value="<?php echo $data['phone'] ?>"> <br> <br>    
+<input type="text" placeholder="Enter phone no."name="phone" size="10" value="<?php echo $data['phone'] ?? ''?>"> <br> <br>    
 Address    
 <br>    
-<textarea cols="80" rows="5"  name="address"><?php echo $data['address'] ?></textarea>    
+<textarea cols="80" rows="5"  name="address"><?php echo $data['address'] ?? ''?></textarea>    
 <br> <br>    
 Email:    
-<input type="email" placeholder="Enter E-mail" id="email" name="email" value="<?php echo $data['e_mail'] ?>"> <br>      
+<input type="email" placeholder="Enter E-mail" id="email" name="email" value="<?php echo $data['e_mail'] ??''?>"> <br>      
 <br> <br>    
 Password:    
-<input type="Password" placeholder="Enter Password" id="pass" name="pass" value="<?php echo $data['password'] ?>"> <br>     
+<input type="Password" placeholder="Enter Password" id="pass" name="pass" value="<?php echo $data['password'] ??'' ?>"> <br>     
 <br> <br>    
 <input type="submit" value="Submit">    
 <input type="reset" value="Reset">  
