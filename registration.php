@@ -111,7 +111,8 @@ if(isset($_GET['id']))
 <style>
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color:SlateBlue;
+  background-color:#ecf3f3;
+  
 }
 
 * {
@@ -121,7 +122,9 @@ body {
 /* Add padding to containers */
 .container {
   padding: 16px;
-  background-color: Violet;
+  background-color: #c7c2c7;
+  border: 2px;
+  border-color:red;
 }
 
 /* Full-width input fields */
