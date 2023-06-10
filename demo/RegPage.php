@@ -10,7 +10,7 @@ if(isset($_POST)&& !empty($_POST)){
     $contact =$_POST["contact"];
     $email =$_POST["email"];
     $address =$_POST["address"];
-    $password =$_POST["password"];
+    $passwrd =$_POST["password"];
 
     $servername="localhost";
     $username="root";
@@ -23,7 +23,7 @@ if(isset($_POST)&& !empty($_POST)){
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $sql = "INSERT INTO user (name, gender, course, hobby, contact, email, address, password) values('".$name."','". $gender."','".$course."','".implode(',',[$hobbies])."','".$contact."','".  $email."','".$address."','".$password."')";
+    $sql = "INSERT INTO user (name, gender, course, hobby, contact, email, address, password) values('".$name."','". $gender."','".$course."','".implode(',',[$hobbies])."','".$contact."','".  $email."','".$address."','".$passwrd."')";
 
     //echo $sql; 
     if (mysqli_query($conn, $sql)) {
