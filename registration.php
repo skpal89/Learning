@@ -45,8 +45,9 @@ update
 function update($id, $post)
 {
   $conn = dbConnection();
+  $gender = isset($post['gender']) ? $post['gender']: '';
 
-  $sql = "UPDATE student_info SET first_name='".$post['firstname']."', last_name='". $post['lastname']."', course='". $post['course']."', gender='". ($post['gender'] ?? '')."', hobbies='".implode("|",$post['hobby'])."', phone='" .$post['phone'] ."', address='". $post['address']. "', e_mail='". $post['email']. "', password='". $post['pass']."' WHERE student_id=$id";
+  $sql = "UPDATE student_info SET first_name='".$post['firstname']."', last_name='". $post['lastname']."', course='". $post['course']."', gender='". $gender."', hobbies='".implode("|",$post['hobby'])."', phone='" .$post['phone'] ."', address='". $post['address']. "', e_mail='". $post['email']. "', password='". $post['pass']."' WHERE student_id =$id";
 
 //echo $sql; die;
 
