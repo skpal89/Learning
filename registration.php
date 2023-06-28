@@ -112,8 +112,7 @@ if(isset($_GET['id']))
 <style>
 body {
   font-family: Arial, Helvetica, sans-serif;
-  background-color:#ecf3f3;
-  
+  background-color:skyblue;
 }
 
 * {
@@ -125,11 +124,12 @@ body {
   padding: 16px;
   background-color: #c7c2c7;
   border: 2px;
-  border-color:red;
+  border-color:black;
+  width: 30%;
 }
 
 /* Full-width input fields */
-input[type=text], input[type=password] {
+input[type=text], input[type=password],input[type=email], select, textarea {
   width: 100%;
   padding: 15px;
   margin: 5px 0 22px 0;
@@ -143,38 +143,31 @@ input[type=text]:focus, input[type=password]:focus {
   outline: none;
 }
 
+input[type="radio"] {
+      background-color: #ff0000;
+      border: 2px solid #000000;
+      border-radius: 50%;
+      box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+      padding: 8px;
+      margin-right: 10px;
+}
+
+
+input[type="submit"]{
+  width: 100%;
+  padding: 15px;
+  margin: 5px 0 22px 0;
+  display: inline-block;
+  border: none;
+  background: #048f49;
+}
+
+
 /* Overwrite default styles of hr */
 hr {
-  border: 1px solid #f1f1f1;
-  margin-bottom: 25px;
+  border: 1px solid #0a0ad7;
 }
 
-/* Set a style for the submit button */
-.registerbtn {
-  background-color: #04AA6D;
-  color: white;
-  padding: 16px 20px;
-  margin: 8px 0;
-  border: none;
-  cursor: pointer;
-  width: 100%;
-  opacity: 0.9;
-}
-
-.registerbtn:hover {
-  opacity: 1;
-}
-
-/* Add a blue text color to links */
-a {
-  color: dodgerblue;
-}
-
-/* Set a grey background color and center the text of the "sign in" section */
-.signin {
-  background-color: #f1f1f1;
-  text-align: center;
-}
 </style>    
 <Title>     
 Create a Registration form   
@@ -182,8 +175,10 @@ Create a Registration form
 </Head>  
 <Body>   
  
-  <h1>Registration form:</h1>
+  <div align="center";><h1>Registration</h1>
     <p>Please fill in this form to create an account.</p>
+    </div>
+   
     <hr> 
 <br>    
 <form action="" name="registration-page" method="post"> 
@@ -250,7 +245,7 @@ Phone :
 <input type="text" placeholder="Enter phone no."name="phone" size="10" value="<?php echo $data['phone'] ?? ''?>"> <br> <br>    
 Address    
 <br>    
-<textarea cols="80" rows="5"  name="address"><?php echo $data['address'] ?? ''?></textarea>    
+<textarea cols="47" rows="5" placeholder="Enter address" name="address"><?php echo $data['address'] ?? ''?></textarea>    
 <br> <br>    
 Email:    
 <input type="email" placeholder="Enter E-mail" id="email" name="email" value="<?php echo $data['e_mail'] ??''?>"> <br>      
@@ -262,5 +257,6 @@ Password:
 <input type="reset" value="Reset">  
 </div>
 </form>    
+
 </Body>   
 </Html>  
